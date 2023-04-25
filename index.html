@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fakturoid >> Stereo</title>
+</head>
+
+<body>
+    <h1>Převodník faktur (v0.3)</h1>
+
+    <h2>Import Fakturoid XML</h2>
+    <input type="file" id="fileInput" />
+    <pre id="xmlInput"></pre>
+
+    <h2>Export Stereo Kastner XML</h2>
+    <button id="download-converted">Stáhnout převedené XML.</button>
+    <xmp id="xmlOutput"></xmp>
+
+    <h2>Verze</h2>
+    <p>Vytvořili Radek Šmíd & Patricie Matoušová. Využívejte na vlastní nebezpečí.</p>
+    <p>Verze 0.3</p>
+    <ul>
+        <li>Opraveno: Převod nefunguje, když ve Fakturoidu chybí LINE s daní 0.</li>
+        <li>Zvládá to, když XML vstup v sobě má vícero faktur</li>
+        <li>Tlačítko stáhnout XML výsledek</li>
+        <li>Základně reagovat, když se převod nepovede tak, aby to uživatel poznal.</li>
+        <li>Pojmenovat stažený soubor podle nahraného + "-converted.xml"</li>
+    </ul>
+    <p>Verze 0.2</p>
+    <ul>
+        <li>Přepracovat podle zadání z mailu 5.1.2023</li>
+        <li>Přidal jsem do výpisu tag &ltDocument&gt</li>
+        <li>Odebral jsem z výpisu tag &ltSuplier&gt</li>
+        <li>&ltIssueDate&gt bude text z fakturoidu "issued_on" spojený s textem "T00:00:00.00"</li>
+        <li>Všechna vypočtená čísla se zobrazují zaokrouhlená na dvě desetinná místa - když je nemají, doplní se nuly.</li>
+        <li>Oprava výpočtů v DocumetTotals (TaxableTotal, VatTotal, NetTotal, NetPaymentTotal, NetPaymentTotalRounded)</li>
+    </ul>
+    <p>Verze 0.1</p>
+    <ul>
+        <li>Output faktury je formátovaný</li>
+        <li>Přepsání podle zadání z emailu 30.12.2022</li>
+    </ul>
+
+    <h2>TODO</h2>
+    <ul>
+        <li>Nějak zkrášlit frontend</li>
+        <li>Zvládat speciální znaky ve fakturách</li>
+        <li>Reagovat, když se převod nepovede i když se převod povede, rozpoznatelným způsobem.</li>
+        <li>Tlačítko reset. Musí být vidět co se zpracovává/co je zpracováno.</li>
+        <li>Když nahraju, dám reload a pak download stáhne to prázdný soubor.</li>
+    </ul>
+
+    <!-- Read XMl file, transform it to JSON, reform it, tranform back to XML for download -->
+    <script src="./downloader.js"></script>
+    <script src="./xml-js.js"></script>
+    <script src="./converter.js"></script>
+</body>
+
+</html>
