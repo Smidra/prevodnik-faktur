@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://1.www.s81c.com/common/carbon-for-ibm-dotcom/tag/v1/latest/plex.css"/>
+    <link rel="stylesheet" href="https://1.www.s81c.com/common/carbon/web-components/tag/v2/latest/grid.css"/>
+    <script type="module" src="https://1.www.s81c.com/common/carbon/web-components/tag/v2/latest/list.min.js"></script>
+    <script type="module"
+            src="https://1.www.s81c.com/common/carbon/web-components/tag/v2/latest/button.min.js"></script>
+    <script type="module"
+            src="https://1.www.s81c.com/common/carbon/web-components/tag/v2/latest/file-uploader.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/carbon-components/css/carbon-components.min.css">
+    <title>Převodník faktur paní Matoušové</title>
+</head>
+<body>
+
+<main id="main-content" style="height: 100%; margin: 0px; width: 100%;" class="cds--content">
+    <div class="cds--grid">
+        <div class="cds--col-xlg-7 cds--col-lg-10 cds--col-md-6 ">
+            <h1 style="margin: 50px 0px 30px;">Převést Fakturoid </h1>
+
+            <!-- Nahrát XML -->
+            <label for="fileInput" class="bx--btn bx--btn--primary">Nahrát XML</label>
+            <input id="fileInput" type="file" style="display:none">
+
+            <!-- Stáhnout XML -->
+            <cds-button id="download-converted" size="lg" kind="primary" href=".">
+                Stáhnout převedené XML.
+            </cds-button>
+
+            <!-- Tady ukazu hotovou vec -->
+            <xmp id="xmlOutput"></xmp>
+
+            <br>
+            <h4>Historie verzí</h4>
+
+            <br>
+            <p>Verze 0.4</p>
+            <cds-unordered-list>
+                <cds-list-item>Připravit webovku na několik převodníků</cds-list-item>
+                <cds-list-item>Dole tlačítko zpět</cds-list-item>
+                <cds-list-item>Nějak zkrášlit klikátka</cds-list-item>
+            </cds-unordered-list>
+
+            <br>
+            <p>Verze 0.3</p>
+            <cds-unordered-list>
+                <cds-list-item>Opraveno: Převod nefunguje, když ve Fakturoidu chybí LINE s daní 0.</cds-list-item>
+                <cds-list-item>Zvládá to, když XML vstup v sobě má vícero faktur</cds-list-item>
+                <cds-list-item>Tlačítko stáhnout XML výsledek</cds-list-item>
+                <cds-list-item>Základně reagovat, když se převod nepovede tak, aby to uživatel poznal.
+                </cds-list-item>
+                <cds-list-item>Pojmenovat stažený soubor podle nahraného + "-converted.xml"</cds-list-item>
+            </cds-unordered-list>
+
+            <br>
+            <p>Verze 0.2</p>
+            <cds-unordered-list>
+                <cds-list-item>Přepracovat podle zadání z mailu 5.1.2023</cds-list-item>
+                <cds-list-item>Přidal jsem do výpisu tag &ltDocument&gt</cds-list-item>
+                <cds-list-item>Odebral jsem z výpisu tag &ltSuplier&gt</cds-list-item>
+                <cds-list-item>&ltIssueDate&gt bude text z fakturoidu "issued_on" spojený s textem "T00:00:00.00"
+                </cds-list-item>
+                <cds-list-item>Všechna vypočtená čísla se zobrazují zaokrouhlená na dvě desetinná místa - když je
+                    nemají,
+                    doplní se nuly.
+                </cds-list-item>
+                <cds-list-item>Oprava výpočtů v DocumetTotals (TaxableTotal, VatTotal, NetTotal, NetPaymentTotal,
+                    NetPaymentTotalRounded)
+                </cds-list-item>
+            </cds-unordered-list>
+
+            <br>
+            <p>Verze 0.1</p>
+            <cds-unordered-list>
+                <cds-list-item>Output faktury je formátovaný</cds-list-item>
+                <cds-list-item>Přepsání podle zadání z emailu 30.12.2022</cds-list-item>
+            </cds-unordered-list>
+
+            <br>
+            <p>TODO</p>
+            <cds-unordered-list>
+                <cds-list-item>Zvládat speciální znaky ve fakturách</cds-list-item>
+                <cds-list-item>Reagovat, když se převod nepovede i když se převod povede, rozpoznatelným způsobem.
+                </cds-list-item>
+                <cds-list-item>Tlačítko reset. Musí být vidět co se zpracovává/co je zpracováno.</cds-list-item>
+                <cds-list-item>Když nahraju, dám reload a pak download stáhne to prázdný soubor.</cds-list-item>
+            </cds-unordered-list>
+            <br>
+            <br>
+            <cds-button size="lg" kind="secondary" href="../"> Zpět</cds-button>
+            <br>
+            <br>
+
+        </div>
+    </div>
+
+    <!-- Read XMl file, transform it to JSON, reform it, tranform back to XML for download -->
+    <script src="downloader.js"></script>
+    <script src="xml-js.js"></script>
+    <script src="converter.js"></script>
+
+</main>
+
+
+</body>
+</html>
+
