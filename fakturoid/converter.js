@@ -124,10 +124,10 @@ function convertInvoice(invoice) {
 
 // Bing please help me.
 const fileInput = document.getElementById('fileInput');
-const uploadButton = document.querySelector('.bx--btn--primary');
-uploadButton.addEventListener('click', () => {
-    fileInput.click();
-});
+//const uploadButton = document.querySelector('.bx--btn--primary');
+// uploadButton.addEventListener('click', () => {
+//     fileInput.click();
+// });
 fileInput.addEventListener('input', () => {
     const file = fileInput.files[0];
 
