@@ -1,4 +1,4 @@
 # Převodník faktur
 
-Převádí faktury z Fakturoidu >> Stereo Kastner
+Převádí faktury z do Stereo Kastner.
 

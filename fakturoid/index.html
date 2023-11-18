@@ -1,109 +1,178 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"
+      xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
+    <!--  Variables, font and grid  -->
+    <link rel="stylesheet" href="https://1.www.s81c.com/common/carbon/web-components/tag/v2/latest/themes.css"/>
     <link rel="stylesheet" href="https://1.www.s81c.com/common/carbon-for-ibm-dotcom/tag/v1/latest/plex.css"/>
     <link rel="stylesheet" href="https://1.www.s81c.com/common/carbon/web-components/tag/v2/latest/grid.css"/>
-    <script type="module" src="https://1.www.s81c.com/common/carbon/web-components/tag/v2/latest/list.min.js"></script>
+    <!--  favicon -->
+    <link rel="icon" type="image/svg+xml" href="../assets/icons/change-catalog.svg">
+
+    <!-- Buttons -->
+    <link rel="stylesheet" href="https://unpkg.com/carbon-components/css/carbon-components.min.css">
     <script type="module"
             src="https://1.www.s81c.com/common/carbon/web-components/tag/v2/latest/button.min.js"></script>
+    <!-- List  -->
+    <script type="module" src="https://1.www.s81c.com/common/carbon/web-components/tag/v2/latest/list.min.js"></script>
+    <!-- Progress indicator   -->
     <script type="module"
-            src="https://1.www.s81c.com/common/carbon/web-components/tag/v2/latest/file-uploader.min.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/carbon-components/css/carbon-components.min.css">
+            src="https://1.www.s81c.com/common/carbon/web-components/tag/v2/latest/progress-indicator.min.js"></script>
+    <!-- Acordion -->
+    <script type="module"
+            src="https://1.www.s81c.com/common/carbon/web-components/tag/v2/latest/accordion.min.js"></script>
     <title>Převodník faktur paní Matoušové</title>
-</head>
-<body>
 
-<main id="main-content" style="height: 100%; margin: 0px; width: 100%;" class="cds--content">
+    <!-- Error notification -->
+    <script type="module"
+            src="https://1.www.s81c.com/common/carbon/web-components/tag/v2/latest/notification.min.js"></script>
+</head>
+
+<body>
+<main id="main-content" style="height: 100%; margin: 0; width: 100%;" class="cds--content cds-theme-zone-white">
     <div class="cds--grid">
         <div class="cds--col-xlg-7 cds--col-lg-10 cds--col-md-6 ">
-            <h1 style="margin: 50px 0px 30px;">Převést Fakturoid </h1>
+            <!-- Heading  -->
+            <h1 style="margin: 50px 0 30px;">Převést Fakturoid </h1>
+
+            <!-- Progress indicator  -->
+            <cds-progress-indicator>
+                <cds-progress-step id="progress-upload"
+                                   label="Upload"
+                                   secondary-label-text="nahrání XML"
+                                   state="incomplete"></cds-progress-step>
+                <cds-progress-step id="progress-import"
+                                   label="Import"
+                                   secondary-label-text="do JSONu"
+                                   state="incomplete"></cds-progress-step>
+                <cds-progress-step id="progress-transform"
+                                   label="Transform"
+                                   secondary-label-text="záměna polí"
+                                   state="incomplete"></cds-progress-step>
+                <cds-progress-step id="progress-export"
+                                   label="Export"
+                                   secondary-label-text="zpět na XML"
+                                   state="incomplete"></cds-progress-step>
+                <cds-progress-step id="progress-done"
+                                   label="Done"
+                                   secondary-label-text="ke stažení"
+                                   state="incomplete"
+                                   description="The progress indicator will listen for clicks on the steps"></cds-progress-step>
+            </cds-progress-indicator>
+            <br/>
+            <br/>
+
+            <!-- Possible hidden error notification -->
+            <div id="notification_wrapper" style="display: none;">
+                <cds-inline-notification id="notification" style="min-width: 30rem; margin-bottom: .5rem" >
+                </cds-inline-notification>
+            </div>
+            <br/>
 
             <!-- Nahrát XML -->
-            <label for="fileInput" class="bx--btn bx--btn--primary">Nahrát XML</label>
+            <label for="fileInput" class="bx--btn bx--btn--tertiary">Nahrát XML</label>
             <input id="fileInput" type="file" style="display:none">
 
             <!-- Stáhnout XML -->
-            <button class="bx--btn bx--btn--primary" id="download-converted" size="lg" kind="primary" href=".">
+            <button class="bx--btn bx--btn--primary" disabled id="download-converted">
                 Stáhnout převedené XML.
             </button>
 
-<!--            <cds-button id="download-converted" size="lg" kind="primary" href=".">-->
-<!--                Stáhnout převedené XML.-->
-<!--            </cds-button>-->
 
             <!-- Tady ukazu hotovou vec -->
-            <xmp id="xmlOutput"></xmp>
+            <xmp hidden id="xmlOutput"></xmp>
+            <br/>
+            <br/>
 
-            <br>
-            <h4>Historie verzí</h4>
-
-            <br>
-            <p>Verze 0.4</p>
+            <p>Verze 0.5</p>
             <cds-unordered-list>
-                <cds-list-item>Připravit webovku na několik převodníků</cds-list-item>
-                <cds-list-item>Dole tlačítko zpět</cds-list-item>
-                <cds-list-item>Nějak zkrášlit klikátka</cds-list-item>
+                <cds-list-item>Lepší chování v případě chyb</cds-list-item>
+                <cds-list-item>Popisy starších verzí jsou schované</cds-list-item>
+                <cds-list-item>Nelze stáhnout převedenou fakturu dokud se něco nepřevede</cds-list-item>
+                <cds-list-item>Informujeme uživatele o postupu převodu</cds-list-item>
+                <cds-list-item>Čistčí vnitřní struktura programu</cds-list-item>
+                <cds-list-item>Favicon ikona prohlížeče</cds-list-item>
             </cds-unordered-list>
 
-            <br>
-            <p>Verze 0.3</p>
-            <cds-unordered-list>
-                <cds-list-item>Opraveno: Převod nefunguje, když ve Fakturoidu chybí LINE s daní 0.</cds-list-item>
-                <cds-list-item>Zvládá to, když XML vstup v sobě má vícero faktur</cds-list-item>
-                <cds-list-item>Tlačítko stáhnout XML výsledek</cds-list-item>
-                <cds-list-item>Základně reagovat, když se převod nepovede tak, aby to uživatel poznal.
-                </cds-list-item>
-                <cds-list-item>Pojmenovat stažený soubor podle nahraného + "-converted.xml"</cds-list-item>
-            </cds-unordered-list>
+            <!-- Changelog -->
+            <br/>
+            <cds-accordion>
+                <cds-accordion-item title="Starší verze">
+                    <p>Verze 0.4</p>
+                    <cds-unordered-list>
+                        <cds-list-item>Webovka je připravena na víc převodníků</cds-list-item>
+                        <cds-list-item>Tlačítko zpět</cds-list-item>
+                        <cds-list-item>Tlačítka na nahrání a stažení</cds-list-item>
+                    </cds-unordered-list>
 
-            <br>
-            <p>Verze 0.2</p>
-            <cds-unordered-list>
-                <cds-list-item>Přepracovat podle zadání z mailu 5.1.2023</cds-list-item>
-                <cds-list-item>Přidal jsem do výpisu tag &ltDocument&gt</cds-list-item>
-                <cds-list-item>Odebral jsem z výpisu tag &ltSuplier&gt</cds-list-item>
-                <cds-list-item>&ltIssueDate&gt bude text z fakturoidu "issued_on" spojený s textem "T00:00:00.00"
-                </cds-list-item>
-                <cds-list-item>Všechna vypočtená čísla se zobrazují zaokrouhlená na dvě desetinná místa - když je
-                    nemají,
-                    doplní se nuly.
-                </cds-list-item>
-                <cds-list-item>Oprava výpočtů v DocumetTotals (TaxableTotal, VatTotal, NetTotal, NetPaymentTotal,
-                    NetPaymentTotalRounded)
-                </cds-list-item>
-            </cds-unordered-list>
+                    <br/>
+                    <p>Verze 0.3</p>
+                    <cds-unordered-list>
+                        <cds-list-item>Opraveno: Převod nefunguje, když ve Fakturoidu chybí LINE s daní 0.
+                        </cds-list-item>
+                        <cds-list-item>Zvládá to, když XML vstup v sobě má vícero faktur</cds-list-item>
+                        <cds-list-item>Tlačítko stáhnout XML výsledek</cds-list-item>
+                        <cds-list-item>Základně reagovat, když se převod nepovede tak, aby to uživatel poznal.
+                        </cds-list-item>
+                        <cds-list-item>Pojmenovat stažený soubor podle nahraného + "-converted.xml"</cds-list-item>
+                    </cds-unordered-list>
 
-            <br>
-            <p>Verze 0.1</p>
-            <cds-unordered-list>
-                <cds-list-item>Output faktury je formátovaný</cds-list-item>
-                <cds-list-item>Přepsání podle zadání z emailu 30.12.2022</cds-list-item>
-            </cds-unordered-list>
+                    <br>
+                    <p>Verze 0.2</p>
+                    <cds-unordered-list>
+                        <cds-list-item>Přepracovat podle zadání z mailu 5.1.2023</cds-list-item>
+                        <cds-list-item>Přidal jsem do výpisu tag &ltDocument&gt</cds-list-item>
+                        <cds-list-item>Odebral jsem z výpisu tag &ltSuplier&gt</cds-list-item>
+                        <cds-list-item>&ltIssueDate&gt bude text z fakturoidu "issued_on" spojený s textem
+                            "T00:00:00.00"
+                        </cds-list-item>
+                        <cds-list-item>Všechna vypočtená čísla se zobrazují zaokrouhlená na dvě desetinná místa - když
+                            je
+                            nemají,
+                            doplní se nuly.
+                        </cds-list-item>
+                        <cds-list-item>Oprava výpočtů v DocumetTotals (TaxableTotal, VatTotal, NetTotal,
+                            NetPaymentTotal,
+                            NetPaymentTotalRounded)
+                        </cds-list-item>
+                    </cds-unordered-list>
 
-            <br>
-            <p>TODO</p>
-            <cds-unordered-list>
-                <cds-list-item>Zvládat speciální znaky ve fakturách</cds-list-item>
-                <cds-list-item>Reagovat, když se převod nepovede i když se převod povede, rozpoznatelným způsobem.
-                </cds-list-item>
-                <cds-list-item>Tlačítko reset. Musí být vidět co se zpracovává/co je zpracováno.</cds-list-item>
-                <cds-list-item>Když nahraju, dám reload a pak download stáhne to prázdný soubor.</cds-list-item>
-            </cds-unordered-list>
-            <br>
-            <br>
+                    <br>
+                    <p>Verze 0.1</p>
+                    <cds-unordered-list>
+                        <cds-list-item>Output faktury je formátovaný</cds-list-item>
+                        <cds-list-item>Přepsání podle zadání z emailu 30.12.2022</cds-list-item>
+                    </cds-unordered-list>
+
+                    <br>
+                    <p>TODO</p>
+                    <cds-unordered-list>
+                        <cds-list-item>Zvládat speciální znaky ve fakturách</cds-list-item>
+                        <cds-list-item>Reagovat, když se převod nepovede i když se převod povede, rozpoznatelným
+                            způsobem.
+                        </cds-list-item>
+                        <cds-list-item>Tlačítko reset. Musí být vidět co se zpracovává/co je zpracováno.</cds-list-item>
+                        <cds-list-item>Když nahraju, dám reload a pak download stáhne to prázdný soubor.</cds-list-item>
+                    </cds-unordered-list>
+                </cds-accordion-item>
+            </cds-accordion>
+
+            <br/>
+            <br/>
             <cds-button size="lg" kind="secondary" href="../"> Zpět</cds-button>
-            <br>
-            <br>
+            <br/>
+            <br/>
 
         </div>
     </div>
 
     <!-- Read XMl file, transform it to JSON, reform it, tranform back to XML for download -->
-    <script src="downloader.js"></script>
-    <script src="xml-js.js"></script>
+    <script src="../assets/javascript/downloader.js"></script>
+    <script src="../assets/javascript/xml-js.js"></script>
+    <script src="../assets/javascript/progress-bar.js"></script>
+    <script src="../assets/javascript/give-error.js"></script>
     <script src="converter.js"></script>
-
 </main>
 
 
