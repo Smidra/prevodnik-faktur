@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"
+      xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <!--  Variables, font and grid  -->
+    <link rel="stylesheet" href="https://1.www.s81c.com/common/carbon/web-components/tag/v2/latest/themes.css"/>
+    <link rel="stylesheet" href="https://1.www.s81c.com/common/carbon-for-ibm-dotcom/tag/v1/latest/plex.css"/>
+    <link rel="stylesheet" href="https://1.www.s81c.com/common/carbon/web-components/tag/v2/latest/grid.css"/>
+    <!--  favicon -->
+    <link rel="icon" type="image/svg+xml" href="../assets/icons/change-catalog.svg">
+
+    <!-- Buttons -->
+    <link rel="stylesheet" href="https://unpkg.com/carbon-components/css/carbon-components.min.css">
+    <script type="module"
+            src="https://1.www.s81c.com/common/carbon/web-components/tag/v2/latest/button.min.js"></script>
+    <!-- List  -->
+    <script type="module" src="https://1.www.s81c.com/common/carbon/web-components/tag/v2/latest/list.min.js"></script>
+    <!-- Progress indicator   -->
+    <script type="module"
+            src="https://1.www.s81c.com/common/carbon/web-components/tag/v2/latest/progress-indicator.min.js"></script>
+    <!-- Acordion -->
+    <script type="module"
+            src="https://1.www.s81c.com/common/carbon/web-components/tag/v2/latest/accordion.min.js"></script>
+    <title>Převodník faktur paní Matoušové</title>
+
+    <!-- Error notification -->
+    <script type="module"
+            src="https://1.www.s81c.com/common/carbon/web-components/tag/v2/latest/notification.min.js"></script>
+</head>
+
+<body>
+<main id="main-content" style="height: 100%; margin: 0; width: 100%;" class="cds--content cds-theme-zone-white">
+    <div class="cds--grid">
+        <div class="cds--col-xlg-7 cds--col-lg-10 cds--col-md-6 ">
+            <!-- Heading  -->
+            <h1 style="margin: 50px 0 30px;">Převést Fakturka </h1>
+
+            <!-- Progress indicator  -->
+            <cds-progress-indicator>
+                <cds-progress-step id="progress-upload"
+                                   label="Upload"
+                                   secondary-label-text="nahrání XML"
+                                   state="incomplete"></cds-progress-step>
+                <cds-progress-step id="progress-import"
+                                   label="Import"
+                                   secondary-label-text="do JSONu"
+                                   state="incomplete"></cds-progress-step>
+                <cds-progress-step id="progress-transform"
+                                   label="Transform"
+                                   secondary-label-text="záměna polí"
+                                   state="incomplete"></cds-progress-step>
+                <cds-progress-step id="progress-export"
+                                   label="Export"
+                                   secondary-label-text="zpět na XML"
+                                   state="incomplete"></cds-progress-step>
+                <cds-progress-step id="progress-done"
+                                   label="Done"
+                                   secondary-label-text="ke stažení"
+                                   state="incomplete"
+                                   description="The progress indicator will listen for clicks on the steps"></cds-progress-step>
+            </cds-progress-indicator>
+            <br/>
+            <br/>
+
+            <!-- Possible hidden error notification -->
+            <div id="notification_wrapper" style="display: none;">
+                <cds-inline-notification id="notification" style="min-width: 30rem; margin-bottom: .5rem" >
+                </cds-inline-notification>
+            </div>
+            <br/>
+
+            <!-- Nahrát XML -->
+            <label for="fileInput" class="bx--btn bx--btn--tertiary">Nahrát XML</label>
+            <input id="fileInput" type="file" style="display:none">
+
+            <!-- Stáhnout XML -->
+            <button class="bx--btn bx--btn--primary" disabled id="download-converted">
+                Stáhnout převedené XML.
+            </button>
+
+
+            <!-- Tady ukazu hotovou vec -->
+            <xmp hidden id="xmlOutput"></xmp>
+            <br/>
+            <br/>
+
+            <p>Verze 0.1</p>
+            <cds-unordered-list>
+                <cds-list-item>První verze převodníku</cds-list-item>
+            </cds-unordered-list>
+
+            <!-- Changelog -->
+            <br/>
+            <cds-accordion>
+                <cds-accordion-item title="Starší verze">
+                </cds-accordion-item>
+            </cds-accordion>
+
+            <br/>
+            <br/>
+            <cds-button size="lg" kind="secondary" href="../"> Zpět</cds-button>
+            <br/>
+            <br/>
+
+        </div>
+    </div>
+
+    <!-- Read XMl file, transform it to JSON, reform it, tranform back to XML for download -->
+    <script src="../assets/javascript/downloader.js"></script>
+    <script src="../assets/javascript/xml-js.js"></script>
+    <script src="../assets/javascript/progress-bar.js"></script>
+    <script src="../assets/javascript/give-error.js"></script>
+    <script src="converter.js"></script>
+</main>
+
+
+</body>
+</html>
+
