@@ -41,6 +41,15 @@ function transferDate(oldDate){
     return newDate
 }
 
+function transferDateSimple(oldDate){
+    var a = oldDate.split(".")[0]
+    var b = oldDate.split(".")[1]
+    var c = oldDate.split(".")[2]
+    var newDate = c.concat("-").concat(b).concat("-").concat(a)
+    return newDate
+}
+
+
 // Script to convert Fakturka invoice in JSON >> Kastner Invoice in JSON
 function convertInvoice(invoice) {
     console.log(invoice)
@@ -68,7 +77,7 @@ function convertInvoice(invoice) {
     // Document payment - DONE
     document.Payment = {};
     document.Payment.PaymentType = "BankTransfer";
-    document.Payment.DueDate = transferDate(invoice.ZAHLAVI.DATUM_SPLATNOSTI);
+    document.Payment.DueDate = transferDateSimple(invoice.ZAHLAVI.DATUM_SPLATNOSTI);
     document.Payment.CurrencyCode = "Kč";
     document.Payment.BankAccount = invoice.DODAVATEL.D_BANKA.D_UCET_BANKY.split("/")[0];
     document.Payment.BankCode = invoice.DODAVATEL.D_BANKA.D_UCET_BANKY.split("/")[1];
