@@ -84,7 +84,7 @@ function convertInvoice(invoice) {
     document.Payment.VariableSymbol = invoice.ZAHLAVI.VARIABILNI_SYMBOL;
     // Document VatInfo - DONE
     document.VatInfo = {};
-    // document.VatInfo.VatDate = invoice.taxable_fulfillment_due;
+    document.VatInfo.VatDate = [];
     document.VatInfo.TaxVoucher = "true";
     document.VatInfo.VatSource = "TaxableValue";
     document.VatInfo.VATTableRow = [];
