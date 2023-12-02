@@ -72,7 +72,7 @@
 
             <!-- Nahrát XML -->
             <label for="fileInput" class="bx--btn bx--btn--tertiary">Nahrát XML</label>
-            <input id="fileInput" type="file" style="display:none">
+            <input id="fileInput" type="file" multiple="multiple" style="display:none">
 
             <!-- Stáhnout XML -->
             <button class="bx--btn bx--btn--primary" disabled id="download-converted">
@@ -85,15 +85,21 @@
             <br/>
             <br/>
 
-            <p>Verze 0.1</p>
+            <p>Verze 0.2</p>
             <cds-unordered-list>
-                <cds-list-item>První verze převodníku</cds-list-item>
+                <cds-list-item>Převod více faktur najednou.</cds-list-item>
+                <cds-list-item>DueDate ukazuje datum bez T00:00:00.00</cds-list-item>
+                <cds-list-item>Přidána prázdná značka VatDate</cds-list-item>
             </cds-unordered-list>
 
             <!-- Changelog -->
             <br/>
             <cds-accordion>
                 <cds-accordion-item title="Starší verze">
+                    <p>Verze 0.1</p>
+                    <cds-unordered-list>
+                        <cds-list-item>První verze převodníku</cds-list-item>
+                    </cds-unordered-list>
                 </cds-accordion-item>
             </cds-accordion>
 

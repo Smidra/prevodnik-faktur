@@ -22,18 +22,22 @@ function convertWholeFile(jsonIn) {
 
     // Convert each invoice in the input
     var invoiceNr = 0
-    var inputInvoicesArray = ensureArrayFor(jsonIn.FAKTURA)
-    inputInvoicesArray.forEach(invoice => {
-        jsonOut.DocumentPack.DOCUMENTS.Document[invoiceNr] = convertInvoice(invoice)
+    var inputInvoicesArray = ensureArrayFor(jsonIn.fakturkaMultiple.FAKTURA)
+    console.log("Finished ensuring array")
+    console.log(inputInvoicesArray)
+    inputInvoicesArray.forEach(FAKTURA => {
+        jsonOut.DocumentPack.DOCUMENTS.Document[invoiceNr] = convertInvoice(FAKTURA)
         invoiceNr += 1
     });
 
     // Return the finished converted file
+    console.log("Json OUT:")
+    console.log(jsonOut)
     return jsonOut
 }
 
 // Transfer date from 31.12.2023 to 2023-12-31:T00:00:00.00
-function transferDate(oldDate){
+function transferDate(oldDate) {
     var a = oldDate.split(".")[0]
     var b = oldDate.split(".")[1]
     var c = oldDate.split(".")[2]
@@ -41,7 +45,7 @@ function transferDate(oldDate){
     return newDate
 }
 
-function transferDateSimple(oldDate){
+function transferDateSimple(oldDate) {
     var a = oldDate.split(".")[0]
     var b = oldDate.split(".")[1]
     var c = oldDate.split(".")[2]
@@ -123,11 +127,180 @@ function convertInvoice(invoice) {
     return document
 }
 
-// MAIN of the whole process of transforming
-const fileInput = document.getElementById('fileInput');
-fileInput.addEventListener('input', () => {
-    const file = fileInput.files[0];
+// // MAIN of the whole process of transforming
+// const fileInput = document.getElementById('fileInput');
+// fileInput.addEventListener('input', () => {
+//     const file = fileInput.files[0];
+//     console.log(fileInput.files.length)
+//     for (let i = 0; i < fileInput.files.length; i++) {
+//         console.log(fileInput.files[i])
+//         console.log(".....")
+//     }
+//
+//     // Create an instance of the progressBar to give feedback on the flow
+//     // Usage: myProgressBar.setProgressDone("invalid");
+//     const myProgressBar = new progressBar();
+//
+//     // Create an instance of the Notification to give feedback of the flow
+//     // Usage: myNotification.hide()
+//     const myNotification = new classNotification();
+//
+//     // Convert the file
+//     var xml = ""
+//     const reader = new FileReader();
+//     reader.addEventListener('load', () => {
+//         // Upload step, parse loaded file
+//         try {
+//             const parser = new DOMParser();
+//             xml = parser.parseFromString(reader.result, 'text/xml');
+//             myProgressBar.setProgressUpload("complete");
+//         } catch (error) {
+//             myProgressBar.setProgressUpload("invalid")
+//             myNotification.error(error)
+//             return
+//         }
+//         // Import step, transfer XML to JSON
+//         try {
+//             var jsonIn = xml2json(xml);
+//             myProgressBar.setProgressImport("complete");
+//         } catch (error) {
+//             myProgressBar.setProgressImport("invalid");
+//             myNotification.error(error);
+//             return;
+//         }
+//
+//         // Tranform step, reform the JSON from Fakturoid to Kastner syntax
+//         try {
+//             var jsonOut = convertWholeFile(jsonIn)
+//             myProgressBar.setProgressTransform("complete");
+//         } catch (error) {
+//             myProgressBar.setProgressTransform("invalid");
+//             myNotification.error(error);
+//             return;
+//         }
+//
+//         // Export step, JSON back to XML, prettify
+//         try {
+//             var xml3 = OBJtoXML(jsonOut);
+//             myProgressBar.setProgressExport("complete");
+//         } catch (error) {
+//             myProgressBar.setProgressExport("invalid");
+//             myNotification.error(error);
+//             return;
+//         }
+//
+//         // Done step, Fill the HTML with the finished XML
+//         try {
+//             const XMLversion = '<?xml version="1.0" encoding="utf-8"?>'
+//             var xmlOutput = document.getElementById('xmlOutput');
+//             xmlOutput.textContent = XMLversion.concat(xml3);
+//             xmlOutput.textContent = formatXml(xmlOutput.textContent);
+//             myProgressBar.setProgressDone("complete");
+//             myNotification.success()
+//         } catch (error) {
+//             myProgressBar.setProgressDone("invalid");
+//             myNotification.error(error);
+//             return;
+//         }
+//
+//     });
+//
+//
+//     reader.readAsText(file);
+// });
+// const fileInput = document.getElementById('fileInput');
+// fileInput.addEventListener('input', () => {
+//
+//     // Create an instance of the progressBar to give feedback on the flow
+//     // Usage: myProgressBar.setProgressDone("invalid");
+//     const myProgressBar = new progressBar();
+//
+//     // Create an instance of the Notification to give feedback of the flow
+//     // Usage: myNotification.hide()
+//     const myNotification = new classNotification();
+//
+//     let concatFiles = ""
+//     for (let file of fileInput.files) {
+//         console.log(file);
+//         console.log('Processing file:', file.name);
+//
+//         // Convert the file
+//         const reader = new FileReader();
+//         reader.addEventListener('load', () => {
+//             concatFiles += reader.result
+//             console.log(reader.result)
+//         })
+//     }
+//     concatFiles += ""
+//     console.log(concatFiles)
+//
+//     // Upload step, parse loaded file
+//     try {
+//         const parser = new DOMParser();
+//         xml = parser.parseFromString(concatFiles, 'text/xml');
+//         myProgressBar.setProgressUpload('complete');
+//     } catch (error) {
+//         myProgressBar.setProgressUpload('invalid');
+//         myNotification.error(error);
+//         return;
+//     }
+//
+//     // Import step, transfer XML to JSON
+//     try {
+//         var jsonIn = xml2json(xml);
+//         console.log(jsonIn)
+//         myProgressBar.setProgressImport('complete');
+//     } catch (error) {
+//         myProgressBar.setProgressImport('invalid');
+//         myNotification.error(error);
+//         return;
+//     }
+//
+//     // Transform step, reform the JSON from Fakturoid to Kastner syntax
+//     try {
+//         var jsonOut = convertWholeFile(jsonIn);
+//         myProgressBar.setProgressTransform('complete');
+//     } catch (error) {
+//         myProgressBar.setProgressTransform('invalid');
+//         myNotification.error(error);
+//         return;
+//     }
+//
+//     // Export step, JSON back to XML, prettify
+//     try {
+//         var xml3 = OBJtoXML(jsonOut);
+//         myProgressBar.setProgressExport('complete');
+//     } catch (error) {
+//         myProgressBar.setProgressExport('invalid');
+//         myNotification.error(error);
+//         return;
+//     }
+//
+//     // Done step, Fill the HTML with the finished XML
+//     try {
+//         const XMLversion = '<?xml version="1.0" encoding="utf-8"?>';
+//         var xmlOutput = document.getElementById('xmlOutput');
+//         xmlOutput.textContent = XMLversion.concat(xml3);
+//         xmlOutput.textContent = formatXml(xmlOutput.textContent);
+//         myProgressBar.setProgressDone('complete');
+//         myNotification.success();
+//     } catch (error) {
+//         myProgressBar.setProgressDone('invalid');
+//         myNotification.error(error);
+//         return;
+//     }
+//
+//     reader.readAsText(file);
+// });
 
+
+// Get the file input element
+const fileInput = document.getElementById('fileInput');
+
+// Add an event listener for the 'change' event on the file input
+fileInput.addEventListener('change', handleFileSelection);
+
+function handleFileSelection() {
     // Create an instance of the progressBar to give feedback on the flow
     // Usage: myProgressBar.setProgressDone("invalid");
     const myProgressBar = new progressBar();
@@ -136,23 +309,47 @@ fileInput.addEventListener('input', () => {
     // Usage: myNotification.hide()
     const myNotification = new classNotification();
 
-    // Convert the file
-    const reader = new FileReader();
-    reader.addEventListener('load', () => {
+    // Get all the selected files
+    const selectedFiles = fileInput.files;
+
+    // Initialize an empty array to store file read promises
+    const promises = [];
+
+    // Create a promise for each selected file
+    for (const file of selectedFiles) {
+        const promise = new Promise((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.onload = () => resolve(fileReader.result);
+            fileReader.onerror = () => reject(new Error('Failed to read file'));
+            fileReader.readAsText(file);
+        });
+
+        promises.push(promise);
+    }
+
+    // Concatenate the file contents once all promises are resolved
+    Promise.all(promises).then((fileContents) => {
+        const concatenatedContent = fileContents.join('\n');
+        // console.log(concatenatedContent);
+        const trimmedContent = concatenatedContent.replace(/(<\?xml version="1.0" encoding="utf-8" standalone="yes"\?>)/g, '');
+        // console.log(trimmedContent);
+        let concatFiles = "<fakturkaMultiple>".concat(trimmedContent).concat("</fakturkaMultiple>")
+        console.log(concatFiles);
+
         // Upload step, parse loaded file
         try {
             const parser = new DOMParser();
-            var xml = parser.parseFromString(reader.result, 'text/xml');
+            xml = parser.parseFromString(concatFiles, 'text/xml');
             myProgressBar.setProgressUpload("complete");
         } catch (error) {
             myProgressBar.setProgressUpload("invalid")
             myNotification.error(error)
             return
         }
-
         // Import step, transfer XML to JSON
         try {
             var jsonIn = xml2json(xml);
+            console.log(jsonIn)
             myProgressBar.setProgressImport("complete");
         } catch (error) {
             myProgressBar.setProgressImport("invalid");
@@ -160,7 +357,7 @@ fileInput.addEventListener('input', () => {
             return;
         }
 
-        // Tranform step, reform the JSON from Fakturoid to Kastner syntax
+        // Transform step, reform the JSON from Fakturka multiple to Kastner syntax
         try {
             var jsonOut = convertWholeFile(jsonIn)
             myProgressBar.setProgressTransform("complete");
@@ -195,5 +392,8 @@ fileInput.addEventListener('input', () => {
         }
 
     });
-    reader.readAsText(file);
-});
+
+
+    // reader.readAsText(file);
+
+}
