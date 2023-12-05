@@ -118,8 +118,8 @@ function convertInvoice(invoice) {
     document.DocumentTotals.AdvancePaymentTotal = "0.00";
     document.DocumentTotals.NetPaymentTotal = invoice.PATICKA.CELKEM_K_UHRADE;
     document.DocumentTotals.NetPaymentTotalRounding = "0.00";
-    document.DocumentTotals.NetPaymentTotalRounded = invoice.PATICKA.CELKEM_K_UHRADE.concat(".00");
-    document.DocumentTotals.TypeOfOperation = "OSL";
+    document.DocumentTotals.NetPaymentTotalRounded = invoice.PATICKA.CELKEM_K_UHRADE;
+   document.DocumentTotals.TypeOfOperation = "OSL";
     //document.DocumentTotals.TypeOfVAT = "U";
     document.DocumentTotals.ProcessVAT = "false";
     document.DocumentTotals.ReverseCharge = "false";
