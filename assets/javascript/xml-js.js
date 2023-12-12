@@ -12,11 +12,20 @@ function OBJtoXML(obj) {
         } else if (typeof obj[prop] == "object") {
             xml += OBJtoXML(new Object(obj[prop]));
         } else {
-            xml += obj[prop];
+            // Replace for 5 special characters in XML
+            let newXml = obj[prop].toString()
+            newXml = newXml.replace(/&/g, '&amp;');
+            newXml = newXml.replace(/</g, '&lt;');
+            newXml = newXml.replace(/>/g, '&gt;');
+            newXml = newXml.replace(/"/g, '&quot;');
+            newXml = newXml.replace(/'/g, '&apos;');
+            xml += newXml;
         }
         xml += obj[prop] instanceof Array ? '' : "</" + prop + ">";
     }
-    var xml = xml.replace(/<\/?[0-9]{1,}>/g, '');
+
+    xml = xml.replace(/<\/?[0-9]{1,}>/g, '');
+
     return xml
 }
 
