@@ -88,40 +88,49 @@ function convertInvoice(invoice) {
     document.Payment.VariableSymbol = invoice.ZAHLAVI.VARIABILNI_SYMBOL;
     // Document VatInfo - DONE
     document.VatInfo = {};
-    document.VatInfo.VatDate = {};
+    document.VatInfo.VatDate = transferDateSimple(invoice.DATUM_ZD_PLNENI);
     document.VatInfo.TaxVoucher = "true";
     document.VatInfo.VatSource = "TaxableValue";
     document.VatInfo.VATTableRow = [];
 
     document.VatInfo.VATTableRow[0] = {};
-    document.VatInfo.VATTableRow[0].VATRate = "0.00";
-    document.VatInfo.VATTableRow[0].VATRateCaption = "--";
-    document.VatInfo.VATTableRow[0].TotalTaxableAtRate = "0.00";
-    document.VatInfo.VATTableRow[0].VATAtRate = "0.00";
-    document.VatInfo.VATTableRow[0].TotalWithVAT = "0.00";
+    document.VatInfo.VATTableRow[0].VATRate = "21.00";
+    document.VatInfo.VATTableRow[0].VATRateCaption = "21%";
+    document.VatInfo.VATTableRow[0].TotalTaxableAtRate = invoice.ZA_ZAKLAD;
+    document.VatInfo.VATTableRow[0].VATAtRate = invoice.ZA_DAN;
+    document.VatInfo.VATTableRow[0].TotalWithVAT = invoice.ZA_CELKEM;
 
     document.VatInfo.VATTableRow[1] = {};
-    document.VatInfo.VATTableRow[1].VATRate = "0.00";
-    document.VatInfo.VATTableRow[1].VATRateCaption = "--";
-    document.VatInfo.VATTableRow[1].TotalTaxableAtRate = "0.00";
-    document.VatInfo.VATTableRow[1].VATAtRate = "0.00";
-    document.VatInfo.VATTableRow[1].TotalWithVAT = "0.00";
+    document.VatInfo.VATTableRow[1].VATRate = "12.00";
+    document.VatInfo.VATTableRow[1].VATRateCaption = "12%";
+    document.VatInfo.VATTableRow[1].TotalTaxableAtRate = invoice.SN1_ZAKLAD;
+    document.VatInfo.VATTableRow[1].VATAtRate = invoice.SN1_DAN;
+    document.VatInfo.VATTableRow[1].TotalWithVAT = invoice.SN1_CELKEM;
 
+    document.VatInfo.VATTableRow[2] = {};
+    document.VatInfo.VATTableRow[2].VATRate = "0.00";
+    document.VatInfo.VATTableRow[2].VATRateCaption = "--";
+    document.VatInfo.VATTableRow[2].TotalTaxableAtRate = invoice.ZAKLAD;
+    document.VatInfo.VATTableRow[2].VATAtRate = "0.00";
+    document.VatInfo.VATTableRow[2].TotalWithVAT = invoice.CELKEM;
 
     // DocumentTotals
+    let taxableTotal = invoice.ZA_ZAKLAD + invoice.SN1_ZAKLAD
+    let vatTotal = invoice.ZA_DAN + invoice.SN1_DAN
+    let netTotal = taxableTotal + vatTotal
     document.DocumentTotals = {};
     document.DocumentTotals.NumberOfLines = "0";
-    document.DocumentTotals.NumberOfVATRates = "0";
-    document.DocumentTotals.TaxableTotal = "0.00";
-    document.DocumentTotals.VatTotal = "0.00";
-    document.DocumentTotals.NetTotal = "0.00";
+    document.DocumentTotals.NumberOfVATRates = "2";
+    document.DocumentTotals.TaxableTotal = taxableTotal;
+    document.DocumentTotals.VatTotal = vatTotal;
+    document.DocumentTotals.NetTotal = netTotal;
     document.DocumentTotals.AdvancePaymentTotal = "0.00";
-    document.DocumentTotals.NetPaymentTotal = invoice.PATICKA.CELKEM_K_UHRADE;
+    document.DocumentTotals.NetPaymentTotal = netTotal + invoice.CELKEM;
     document.DocumentTotals.NetPaymentTotalRounding = "0.00";
-    document.DocumentTotals.NetPaymentTotalRounded = invoice.PATICKA.CELKEM_K_UHRADE;
-   document.DocumentTotals.TypeOfOperation = "OSL";
-    //document.DocumentTotals.TypeOfVAT = "U";
-    document.DocumentTotals.ProcessVAT = "false";
+    document.DocumentTotals.NetPaymentTotalRounded = netTotal + invoice.CELKEM;
+    document.DocumentTotals.TypeOfOperation = "OSL";
+    document.DocumentTotals.TypeOfVAT = "U";
+    document.DocumentTotals.ProcessVAT = "true";
     document.DocumentTotals.ReverseCharge = "false";
 
     return document
