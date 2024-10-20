@@ -73,6 +73,8 @@ function convertInvoice(invoice) {
     document.Buyer.Company = {};
     document.Buyer.Company.Company = invoice.ODBERATEL_ZAKAZNIK.O_OBCHODNI_NAZEV_FIRMY;
     document.Buyer.Company.CompanyRegistrationNo = invoice.ODBERATEL_ZAKAZNIK.O_IC;
+    document.Buyer.Company.CompanyTaxRegistrationNo = invoice.ODBERATEL_ZAKAZNIK.O_DIC;
+    document.Buyer.Company.VATPayer = {}
     var custom_code = invoice.ODBERATEL_ZAKAZNIK.O_OBCHODNI_NAZEV_FIRMY.split(" ")[0].toLowerCase().substring(0, 10); // tohle kod firmy v mém programu, jde-li to tak tak malými písmeny první slovo, max. 10 znaků
     document.Buyer.Company.CompanyCode = custom_code;
     // Document Issue - Drobnosti
@@ -87,6 +89,7 @@ function convertInvoice(invoice) {
     document.Payment.BankCode = invoice.DODAVATEL.D_BANKA.D_UCET_BANKY.split("/")[1];
     document.Payment.VariableSymbol = invoice.ZAHLAVI.VARIABILNI_SYMBOL;
     // Document VatInfo - DONE
+    console.log(invoice.ZAHLAVI.DATUM_ZD_PLNENI)
     document.VatInfo = {};
     document.VatInfo.VatDate = transferDateSimple(invoice.ZAHLAVI.DATUM_ZD_PLNENI);
     document.VatInfo.TaxVoucher = "true";
@@ -115,19 +118,20 @@ function convertInvoice(invoice) {
     document.VatInfo.VATTableRow[2].TotalWithVAT = invoice.PATICKA.SOUCTOVA_TABULKA1.CELKEM;
 
     // DocumentTotals
-    let taxableTotal = invoice.ZA_ZAKLAD + invoice.PATICKA.SOUCTOVA_TABULKA1.SN1_ZAKLAD
-    let vatTotal = invoice.ZA_DAN + invoice.PATICKA.SOUCTOVA_TABULKA1.SN1_DAN
-    let netTotal = taxableTotal + vatTotal
+    var taxableTotal = Number(invoice.PATICKA.SOUCTOVA_TABULKA1.ZA_ZAKLAD) + Number(invoice.PATICKA.SOUCTOVA_TABULKA1.SN1_ZAKLAD)
+    var vatTotal = Number(invoice.PATICKA.SOUCTOVA_TABULKA1.ZA_DAN) + Number(invoice.PATICKA.SOUCTOVA_TABULKA1.SN1_DAN)
+    var netTotal = taxableTotal + vatTotal
+    var netPaymentTotal = netTotal + Number(invoice.PATICKA.SOUCTOVA_TABULKA1.CELKEM)
     document.DocumentTotals = {};
     document.DocumentTotals.NumberOfLines = "0";
     document.DocumentTotals.NumberOfVATRates = "2";
-    document.DocumentTotals.TaxableTotal = taxableTotal;
-    document.DocumentTotals.VatTotal = vatTotal;
-    document.DocumentTotals.NetTotal = netTotal;
+    document.DocumentTotals.TaxableTotal = taxableTotal.toFixed(FIXED);
+    document.DocumentTotals.VatTotal = vatTotal.toFixed(FIXED);
+    document.DocumentTotals.NetTotal = netTotal.toFixed(FIXED);
     document.DocumentTotals.AdvancePaymentTotal = "0.00";
-    document.DocumentTotals.NetPaymentTotal = netTotal + invoice.PATICKA.SOUCTOVA_TABULKA1.CELKEM;
+    document.DocumentTotals.NetPaymentTotal = netPaymentTotal.toFixed(FIXED);
     document.DocumentTotals.NetPaymentTotalRounding = "0.00";
-    document.DocumentTotals.NetPaymentTotalRounded = netTotal + invoice.PATICKA.SOUCTOVA_TABULKA1.CELKEM;
+    document.DocumentTotals.NetPaymentTotalRounded = netPaymentTotal.toFixed(FIXED);
     document.DocumentTotals.TypeOfOperation = "OSL";
     document.DocumentTotals.TypeOfVAT = "U";
     document.DocumentTotals.ProcessVAT = "true";
