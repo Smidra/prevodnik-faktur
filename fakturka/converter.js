@@ -137,6 +137,8 @@ function convertInvoice(invoice) {
     document.DocumentTotals.ProcessVAT = "true";
     document.DocumentTotals.ReverseCharge = "false";
 
+    document.Rows = {}
+
     return document
 }
 
