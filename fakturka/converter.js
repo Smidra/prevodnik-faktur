@@ -118,10 +118,10 @@ function convertInvoice(invoice) {
     document.VatInfo.VATTableRow[2].TotalWithVAT = invoice.PATICKA.SOUCTOVA_TABULKA1.CELKEM;
 
     // DocumentTotals
-    var taxableTotal = Number(invoice.PATICKA.SOUCTOVA_TABULKA1.ZA_ZAKLAD) + Number(invoice.PATICKA.SOUCTOVA_TABULKA1.SN1_ZAKLAD)
+    var taxableTotal = Number(invoice.PATICKA.SOUCTOVA_TABULKA1.ZA_ZAKLAD) + Number(invoice.PATICKA.SOUCTOVA_TABULKA1.SN1_ZAKLAD) + Number(invoice.PATICKA.SOUCTOVA_TABULKA1.ZAKLAD)
     var vatTotal = Number(invoice.PATICKA.SOUCTOVA_TABULKA1.ZA_DAN) + Number(invoice.PATICKA.SOUCTOVA_TABULKA1.SN1_DAN)
     var netTotal = taxableTotal + vatTotal
-    var netPaymentTotal = netTotal + Number(invoice.PATICKA.SOUCTOVA_TABULKA1.CELKEM)
+    var netPaymentTotal = netTotal
     document.DocumentTotals = {};
     document.DocumentTotals.NumberOfLines = "0";
     document.DocumentTotals.NumberOfVATRates = "2";
