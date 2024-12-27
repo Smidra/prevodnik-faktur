@@ -32,6 +32,67 @@ function convertWholeFile(jsonIn) {
     return jsonOut
 }
 
+// https://stackoverflow.com/questions/17197226/calculate-european-iban-with-javascript¨
+function isValidIBANNumber(input) {
+    var CODE_LENGTHS = {
+        AD: 24, AE: 23, AT: 20, AZ: 28, BA: 20, BE: 16, BG: 22, BH: 22, BR: 29,
+        CH: 21, CR: 21, CY: 28, CZ: 24, DE: 22, DK: 18, DO: 28, EE: 20, ES: 24,
+        FI: 18, FO: 18, FR: 27, GB: 22, GI: 23, GL: 18, GR: 27, GT: 28, HR: 21,
+        HU: 28, IE: 22, IL: 23, IS: 26, IT: 27, JO: 30, KW: 30, KZ: 20, LB: 28,
+        LI: 21, LT: 20, LU: 20, LV: 21, MC: 27, MD: 24, ME: 22, MK: 19, MR: 27,
+        MT: 31, MU: 30, NL: 18, NO: 15, PK: 24, PL: 28, PS: 29, PT: 25, QA: 29,
+        RO: 24, RS: 22, SA: 24, SE: 24, SI: 19, SK: 24, SM: 27, TN: 24, TR: 26
+    };
+    var iban = String(input).toUpperCase().replace(/[^A-Z0-9]/g, ''), // keep only alphanumeric characters
+        code = iban.match(/^([A-Z]{2})(\d{2})([A-Z\d]+)$/), // match and capture (1) the country code, (2) the check digits, and (3) the rest
+        digits;
+    // check syntax and length
+    if (!code || iban.length !== CODE_LENGTHS[code[1]]) {
+        return false;
+    }
+    // Check it is only from CZ - Czech Republic
+    if (code[1] !== "CZ") {
+        return false;
+    }
+    // rearrange country code and check digits, and convert chars to ints
+    digits = (code[3] + code[1] + code[2]).replace(/[A-Z]/g, function (letter) {
+        return letter.charCodeAt(0) - 55;
+    });
+    // final check
+    return mod97(digits);
+}
+function mod97(string) {
+    var checksum = string.slice(0, 2), fragment;
+    for (var offset = 2; offset < string.length; offset += 7) {
+        fragment = String(checksum) + string.substring(offset, offset + 7);
+        checksum = parseInt(fragment, 10) % 97;
+    }
+    return checksum;
+}
+
+
+function extractAccountNumberFromIban(iban) {
+    const ibanLength = iban.length;
+    const countryCode = iban.substring(0, 2);
+    const controlNumber = iban.substring(2, 4);
+    const bankCodeNumber = iban.substring(4, 8);
+    // const prefixNumber = iban.substring(8, 14);
+    let prefixNumber = parseInt(iban.substring(8, 14), 10); // Remove prefixed zeroes
+    const accountNumber = iban.substring(14, 24);
+
+    if (prefixNumber === 0) {
+        prefixNumber = '';
+    }
+
+    console.log("Country code:", countryCode);
+    console.log("Control number:", controlNumber);
+    console.log("Bank code:", bankCodeNumber);
+    console.log("Prefix number:", prefixNumber);
+    console.log("Account number:", accountNumber);
+
+    return { prefixNumber, accountNumber, bankCodeNumber };
+}
+
 // Script to convert Fakturoid invoice in JSON >> Kastner Invoice in JSON
 function convertInvoice(invoice) {
     FIXED = 2 // Rounding precision for calculations
@@ -61,8 +122,22 @@ function convertInvoice(invoice) {
     document.Payment.PaymentType = "BankTransfer";
     document.Payment.DueDate = invoice.due_on;
     document.Payment.CurrencyCode = "Kč";
-    document.Payment.BankAccount = invoice.bank_account.split("/")[0];
-    document.Payment.BankCode = invoice.bank_account.split("/")[1];
+
+    // document.Payment.BankAccount = invoice.bank_account.split("/")[0];
+    // document.Payment.BankCode = invoice.bank_account.split("/")[1];
+    const iban = invoice.iban;
+    console.log("IBAN:", iban);
+    if (!isValidIBANNumber(iban)) {
+        throw new Error("IBAN is not valid");
+    }
+    const {prefixNumber, accountNumber, bankCodeNumber} = extractAccountNumberFromIban(iban);
+    if (prefixNumber === '') {
+        document.Payment.BankAccount = accountNumber;
+    }else{
+        document.Payment.BankAccount = `${prefixNumber}-${accountNumber}`;
+    }
+    document.Payment.BankCode = bankCodeNumber;
+
     document.Payment.VariableSymbol = invoice.variable_symbol;
     // Document VatInfo - DONE
     document.VatInfo = {};
