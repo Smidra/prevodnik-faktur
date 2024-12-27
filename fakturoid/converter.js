@@ -78,7 +78,7 @@ function extractAccountNumberFromIban(iban) {
     const bankCodeNumber = iban.substring(4, 8);
     // const prefixNumber = iban.substring(8, 14);
     let prefixNumber = parseInt(iban.substring(8, 14), 10); // Remove prefixed zeroes
-    const accountNumber = parseInt(iban.substring(14, 24));
+    const accountNumber = parseInt(iban.substring(14, 24), 10);
 
     if (prefixNumber === 0) {
         prefixNumber = '';
